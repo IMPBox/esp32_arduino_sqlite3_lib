@@ -25,6 +25,9 @@
 #include <fcntl.h>
 #include "shox96_0_2.h"
 
+FILE* imp_fopen(char const* path, char const* mode);
+void imp_fclose(FILE* file);
+
 #undef dbg_printf
 //#define dbg_printf(...) Serial.printf(__VA_ARGS__)
 #define dbg_printf(...) 0
@@ -145,7 +148,7 @@ static int ESP32Close(sqlite3_file *pFile){
   ESP32File *p = (ESP32File*)pFile;
   rc = ESP32FlushBuffer(p);
   sqlite3_free(p->aBuffer);
-  fclose(p->fp);
+  imp_fclose(p->fp);
   //Serial.println("fn:Close:Success");
   return rc;
 }
@@ -446,7 +449,7 @@ static int ESP32Open(
   memset(p, 0, sizeof(ESP32File));
   //p->fd = open(zName, oflags, 0600);
   //p->fd = open(zName, oflags, S_IRUSR | S_IWUSR);
-  p->fp = fopen(zName, mode);
+  p->fp = imp_fopen(zName, mode);
   if( p->fp<=0){
     if (aBuf)
       sqlite3_free(aBuf);
@@ -488,13 +491,13 @@ static int ESP32Delete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
     zDir[i] = '\0';
 
     /* Open a file-descriptor on the directory. Sync. Close. */
-    dfd = fopen(zDir, "r");
+    dfd = imp_fopen(zDir, "r");
     if( dfd<=0 ){
       rc = -1;
     }else{
       rc = fflush(dfd);
       rc = fsync(fileno(dfd));
-      fclose(dfd);
+      imp_fclose(dfd);
     }
   }
   //if (rc == 0)
