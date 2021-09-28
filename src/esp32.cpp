@@ -420,7 +420,8 @@ static int ESP32Open(
 
 	strcpy(mode, "r");
   if( zName==0 ){
-    return SQLITE_IOERR;
+      zName = "/sdcard/tempfile";
+      flags |= SQLITE_OPEN_CREATE;
   }
 
   if( flags&SQLITE_OPEN_MAIN_JOURNAL ){
