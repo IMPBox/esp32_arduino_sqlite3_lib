@@ -17,7 +17,7 @@
 #define SQLITE_DEFAULT_MMAP_SIZE             0
 #define SQLITE_CORE                          1
 #define SQLITE_SYSTEM_MALLOC                 1
-#define SQLITE_THREADSAFE                    0
+#define SQLITE_THREADSAFE                    1
 #define SQLITE_MUTEX_APPDEF                  1
 #define SQLITE_OMIT_WAL                      1
 #define SQLITE_DISABLE_FTS3_UNICODE          1
