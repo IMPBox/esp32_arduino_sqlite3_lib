@@ -27,6 +27,7 @@
 
 FILE* imp_fopen(char const* path, char const* mode);
 void imp_fclose(FILE* file);
+int imp_unlink(char const* path);
 
 #undef dbg_printf
 //#define dbg_printf(...) Serial.printf(__VA_ARGS__)
@@ -476,7 +477,7 @@ static int ESP32Delete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
 
       //Serial.println("fn: Delete");
 
-  rc = unlink(zPath);
+  rc = imp_unlink(zPath);
   if( rc!=0 && errno==ENOENT ) return SQLITE_OK;
 
   if( rc==0 && dirSync ){
